@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<SpecialDocBulk xsi:noNamespaceSchemaLocation="schema.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<TIN>xxxxxxxxxxxxxxxx</TIN>
+	<ListOfSpecialDoc>
+		<SpecialDoc>
+			<TransactionType>01</TransactionType>
+			<TransactionDetail>07</TransactionDetail>
+			<TransactionDocument>1</TransactionDocument>
+			<AdditionalInformation>1</AdditionalInformation>
+			<DocumentNumber>Some-Special-Doc-No-01</DocumentNumber>
+			<DocumentDate>2023-10-18</DocumentDate>
+			<Reference />
+			<BuyerTIN>xxxxxxxxxxxxxxxx</BuyerTIN>
+			<BuyerName>Kuyang</BuyerName>
+			<BuyerAddress>Taman Jeruk Purut</BuyerAddress>
+			<TaxBase>100000000</TaxBase>
+			<VAT>10000000</VAT>
+			<STLG>12000000</STLG>
+		</SpecialDoc>
+	</ListOfSpecialDoc>
+</SpecialDocBulk>

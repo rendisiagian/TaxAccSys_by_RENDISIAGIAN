@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<InputSpecialDocBulk xsi:noNamespaceSchemaLocation="SpecialInput.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<TIN>741342560415159</TIN>
+	<ListOfSpecialDoc>
+		<SpecialDoc>
+			<SpecialDocNo>Some-Special-Doc-No</SpecialDocNo>
+			<SpecialDocDate>2023-03-06</SpecialDocDate>
+			<TrxType>01</TrxType>
+			<TrxCode>01</TrxCode>
+			<TrxDocument>1</TrxDocument>
+			<TaxPeriodMonth>3</TaxPeriodMonth>
+			<TaxPeriodYear>2023</TaxPeriodYear>
+			<TotalTaxBase>100000000</TotalTaxBase>
+			<TotalVAT>10000000</TotalVAT>
+			<TotalSTLG>12000000</TotalSTLG>
+			<SellerTin></SellerTin>
+			<SellerName>Kuyang</SellerName>
+		</SpecialDoc>
+	</ListOfSpecialDoc>
+</InputSpecialDocBulk>

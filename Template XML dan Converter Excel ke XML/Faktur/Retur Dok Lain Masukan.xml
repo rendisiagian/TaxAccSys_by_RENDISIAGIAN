@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<InputSpecialDocReturn>
+<TIN>741342560415159</TIN>
+    <InputReturnDataList>
+      <InputReturnData>
+      	<DocumentNumber>string</DocumentNumber>
+      	<ReturnDocumentNumber>string</ReturnDocumentNumber>
+	<TransactionType>string</TransactionType>
+	<DocumentType>string</DocumentType>
+	<TransactionDetail>string</TransactionDetail>
+	<TransactionDocument>string</TransactionDocument>
+	<DocumentDate>YYYY-MM-DD</DocumentDate>
+	<Period>string</Period>
+	<Year>string</Year>
+	<SellerTIN>string</SellerTIN>
+	<SellerTaxpayerName>string</SellerTaxpayerName>
+	<ReturnTaxBase>0</ReturnTaxBase>
+	<ReturnVAT>0</ReturnVAT>
+	<ReturnSTLG>0</ReturnSTLG>      
+      </InputReturnData>
+    </InputReturnDataList>
+</InputSpecialDocReturn>

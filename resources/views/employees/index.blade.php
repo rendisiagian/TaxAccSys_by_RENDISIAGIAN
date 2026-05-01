@@ -1,0 +1,159 @@
+<x-app-layout>
+@section('title', __('Employees'))
+
+@section('content')
+<div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+    <div class="p-6 border-b border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+            <h2 class="text-lg font-semibold text-slate-800">{{ __('Employees') }}</h2>
+            <p class="text-sm text-slate-500 mt-1">Manage employee data for PPh 21 calculation.</p>
+        </div>
+        <div x-data="{}" class="flex items-center space-x-2">
+            <a href="{{ route('employees.export') }}" class="inline-flex items-center justify-center px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors text-sm font-medium">
+                <i data-lucide="download" class="w-4 h-4 mr-2"></i>
+                Export
+            </a>
+            <button @click="$dispatch('open-modal', 'import-employees')" class="inline-flex items-center justify-center px-4 py-2 bg-slate-600 text-white rounded-lg hover:bg-slate-700 transition-colors text-sm font-medium">
+                <i data-lucide="upload" class="w-4 h-4 mr-2"></i>
+                Import
+            </button>
+            <a href="{{ route('employees.create') }}" class="inline-flex items-center justify-center px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors text-sm font-medium">
+                <i data-lucide="plus" class="w-4 h-4 mr-2"></i>
+                Add Employee
+            </a>
+        </div>
+    </div>
+
+    <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse">
+            <thead>
+                <tr class="bg-slate-50 text-slate-500 text-xs uppercase tracking-wider border-b border-slate-200">
+                    <th class="px-6 py-4 font-semibold">Employee</th>
+                    <th class="px-6 py-4 font-semibold">TIN / NIK</th>
+                    <th class="px-6 py-4 font-semibold">Type</th>
+                    <th class="px-6 py-4 font-semibold">PTKP & TER</th>
+                    <th class="px-6 py-4 font-semibold">{{ __('Status') }}</th>
+                    <th class="px-6 py-4 font-semibold text-right">{{ __('Actions') }}</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-200 text-sm">
+                @forelse($employees as $employee)
+                <tr class="hover:bg-slate-50 transition-colors">
+                    <td class="px-6 py-4">
+                        <div class="font-medium text-slate-800">{{ $employee->name }}</div>
+                        <div class="text-slate-500 text-xs mt-0.5">{{ $employee->branch->name ?? '-' }}</div>
+                    </td>
+                    <td class="px-6 py-4">
+                        <div class="text-slate-700 font-mono text-xs">NPWP: {{ $employee->npwp ?? '-' }}</div>
+                        <div class="text-slate-500 font-mono text-xs mt-0.5">NIK: {{ $employee->nik ?? '-' }}</div>
+                    </td>
+                    <td class="px-6 py-4">
+                        <span class="text-slate-700 capitalize">{{ str_replace('_', ' ', $employee->employee_type) }}</span>
+                    </td>
+                    <td class="px-6 py-4">
+                        <div class="flex items-center space-x-2">
+                            <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-semibold bg-blue-100 text-blue-700 uppercase tracking-wider">
+                                {{ $employee->ptkp_status }}
+                            </span>
+                            <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-semibold bg-indigo-100 text-indigo-700 uppercase tracking-wider" title="TER Category">
+                                TER {{ $employee->ter_category }}
+                            </span>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4">
+                        @if($employee->is_active)
+                        <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-100 text-emerald-700">
+                            {{ __('Active') }}
+                        </span>
+                        @else
+                        <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-slate-100 text-slate-700">
+                            {{ __('Inactive') }}
+                        </span>
+                        @endif
+                    </td>
+                    <td class="px-6 py-4 text-right">
+                        <div class="flex items-center justify-end space-x-3">
+                            <a href="{{ route('employees.edit', $employee) }}" class="text-slate-400 hover:text-indigo-600 transition-colors" title="{{ __('Edit') }}">
+                                <i data-lucide="edit-2" class="w-4 h-4"></i>
+                            </a>
+                            <form action="{{ route('employees.destroy', $employee) }}" method="POST" class="inline-block" onsubmit="return confirm('{{ __('Are you sure?') }}');">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="text-slate-400 hover:text-red-600 transition-colors" title="{{ __('Delete') }}">
+                                    <i data-lucide="trash-2" class="w-4 h-4"></i>
+                                </button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                @empty
+                <tr>
+                    <td colspan="6" class="px-6 py-12 text-center text-slate-500">
+                        {{ __('No data found.') }}
+                    </td>
+                </tr>
+                @endforelse
+            </tbody>
+        </table>
+    </div>
+    
+    @if($employees->hasPages())
+    <div class="p-4 border-t border-slate-200">
+        {{ $employees->links() }}
+    </div>
+    @endif
+</div>
+
+<!-- Import Modal -->
+<div x-data="{ show: false }" 
+     x-show="show" 
+     @open-modal.window="if ($event.detail === 'import-employees') show = true"
+     @keydown.escape.window="show = false"
+     style="display: none;" 
+     class="fixed inset-0 z-50 overflow-y-auto" 
+     aria-labelledby="modal-title" 
+     role="dialog" 
+     aria-modal="true">
+    
+    <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+        <div x-show="show" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" class="fixed inset-0 bg-slate-900 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
+
+        <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+
+        <div x-show="show" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100" x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100" x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" class="inline-block align-bottom bg-white rounded-xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+            <form action="{{ route('employees.import') }}" method="POST" enctype="multipart/form-data">
+                @csrf
+                <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                    <div class="sm:flex sm:items-start">
+                        <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-indigo-100 sm:mx-0 sm:h-10 sm:w-10">
+                            <i data-lucide="upload-cloud" class="h-6 w-6 text-indigo-600"></i>
+                        </div>
+                        <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
+                            <h3 class="text-lg leading-6 font-medium text-slate-900" id="modal-title">
+                                Import Employees
+                            </h3>
+                            <div class="mt-2 text-sm text-slate-500">
+                                <p class="mb-3">Please upload an Excel file (.xlsx, .csv) containing your employees data.</p>
+                                <a href="{{ route('employees.template') }}" class="text-indigo-600 hover:text-indigo-900 font-medium flex items-center mb-4">
+                                    <i data-lucide="download" class="w-4 h-4 mr-1"></i> Download Template
+                                </a>
+                                <input type="file" name="file" accept=".xlsx,.xls,.csv" required class="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-slate-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                    <button type="submit" class="w-full inline-flex justify-center rounded-lg border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none sm:ml-3 sm:w-auto sm:text-sm">
+                        Import Data
+                    </button>
+                    <button type="button" @click="show = false" class="mt-3 w-full inline-flex justify-center rounded-lg border border-slate-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-slate-700 hover:bg-slate-50 focus:outline-none sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
+                        Cancel
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@endsection
+</x-app-layout>
