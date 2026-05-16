@@ -54,6 +54,11 @@ Route::middleware(['auth', 'verified', 'company'])->group(function () {
     Route::post('journals/{journal}/reject', [\App\Http\Controllers\JournalEntryController::class, 'reject'])->name('journals.reject');
 
     // ── Taxation Core ──────────────────────────────
+    Route::get('taxes/draft-faktur', [\App\Http\Controllers\DraftFakturController::class, 'index'])->name('taxes.draft_faktur.index');
+    Route::post('taxes/draft-faktur/upload', [\App\Http\Controllers\DraftFakturController::class, 'upload'])->name('taxes.draft_faktur.upload');
+    Route::post('taxes/draft-faktur/{id}/verify', [\App\Http\Controllers\DraftFakturController::class, 'verify'])->name('taxes.draft_faktur.verify');
+    Route::delete('taxes/draft-faktur/{id}', [\App\Http\Controllers\DraftFakturController::class, 'destroy'])->name('taxes.draft_faktur.destroy');
+
     Route::get('employees/export', [\App\Http\Controllers\EmployeeController::class, 'export'])->name('employees.export');
     Route::get('employees/template', [\App\Http\Controllers\EmployeeController::class, 'downloadTemplate'])->name('employees.template');
     Route::post('employees/import', [\App\Http\Controllers\EmployeeController::class, 'import'])->name('employees.import');

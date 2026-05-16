@@ -34,4 +34,19 @@ class TaxTransaction extends Model
     {
         return $this->belongsTo(JournalEntry::class);
     }
+
+    public function relatedTransaction()
+    {
+        return $this->belongsTo(TaxTransaction::class, 'related_transaction_id');
+    }
+
+    public function relatedTaxes()
+    {
+        return $this->hasMany(TaxTransaction::class, 'related_transaction_id');
+    }
+
+    public function items()
+    {
+        return $this->hasMany(TaxTransactionItem::class);
+    }
 }
